@@ -63,7 +63,7 @@ async function handleCal() {
 
   const avgGPA = calculateGPA(rowData);
   // call postData function
-  await postData({ avgGPA, allSubjects: rowData }, "gpa");
+
 
   showGPAResult.classList.remove("hidden");
   showGPAResult.innerHTML = `<p>GPA: ${avgGPA.gpa.toFixed(2)}</p>`;
@@ -102,49 +102,8 @@ function calculateGPA(data) {
   };
 }
 
-function renderHistory(data) {
-  if (data.length === 0) return;
 
-  showHistory.classList.remove("hidden");
 
-  let html = "";
-
-  for (let i = 0; i < data.length; i++) {
-    const { avgGPA, allSubjects, id } = data[i];
-
-    html += `<div class="bg-white overflow-hidden rounded-md border border-stone-200 shadow-lg mt-3 p-6">
-      <p>GPA: ${avgGPA.gpa.toFixed(2)} | Credits: ${avgGPA.totalCredit}</p>
-    `;
-
-    for (let j = 0; j < allSubjects.length; j++) {
-      const { subject, gpa, credit } = allSubjects[j];
-
-      html += `<div>
-        <p>Subject: ${subject}</p>
-        <p>S-GPA: ${gpa}</p>
-        <p>Credit: ${credit}</p>
-      </div>`;
-    }
-
-    html += `
-      <p>id: ${id}</p>
-      <button class="delete-btn" id="delete-${id}">Delete</button>
-    </div>`;
-  }
-
-  showHistory.insertAdjacentHTML("beforeend", html);
-
-  const buttons = showHistory.querySelectorAll(".delete-btn");
-  console.log(buttons)
-
-  for (let i = 0; i < buttons.length; i++) {
-    const id = data[i].id;
-
-    buttons[i].addEventListener("click", async () => {
-       await deleteData(id, "gpa");
-    });
-  }
-}
 
 //
 // Inits & Event Listeners
@@ -153,10 +112,3 @@ function renderHistory(data) {
 buttonAdd.addEventListener("click", handleAdd);
 buttonReset.addEventListener("click", handleReset);
 buttonCal.addEventListener("click", handleCal);
-
-async function init() {
-  const data = await getAllData("gpa");
-  renderHistory(data);
-}
-
-init();
